@@ -1,4 +1,4 @@
-"""blu URL Configuration
+"""rest URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.1/topics/http/urls/
@@ -14,14 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import include, path
-from django.views.decorators.cache import never_cache
-from django.views.generic import TemplateView
-from django.conf.urls.static import static
-from django.conf import settings
+from django.urls import path, include
 
 urlpatterns = [
-    path('', never_cache(TemplateView.as_view(template_name='index.html'))),
     path('admin/', admin.site.urls),
-    path('api/auth/', include('system.auth.urls'))
+    path('api/auth/', include('system.auth.urls')),
 ]
