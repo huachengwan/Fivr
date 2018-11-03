@@ -1,0 +1,4 @@
+- model: thing.category
+  pk: 1
+  fields:
+    name:

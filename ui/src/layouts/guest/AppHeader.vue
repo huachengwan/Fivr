@@ -2,7 +2,7 @@
   <v-toolbar class='white'>
     <v-container>
       <v-toolbar-title v-text="title">Title</v-toolbar-title>
-      <SigninDialog/>
+      <sigin-dialog/>
     </v-container>
   </v-toolbar>
 </template>
@@ -13,7 +13,7 @@ import SigninDialog from './SigninDialog'
 export default{
   name: 'Header',
   components: {
-    'SigninDialog': SigninDialog
+    SigninDialog
   },
   data: () => ({
     title: 'Fiverr'

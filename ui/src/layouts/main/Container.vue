@@ -1,19 +1,19 @@
 <template>
   <v-app light>
-    <Header/>
+    <app-header/>
     <slot/>
-    <Footer/>
+    <app-footer/>
   </v-app>
 </template>
 
 <script>
-import Header from './Header'
-import Footer from './Footer'
+import AppHeader from './AppHeader'
+import AppFooter from './AppFooter'
 export default{
   name: 'MainLayout',
   components: {
-    'Header': Header,
-    'Footer': Footer
+    AppHeader,
+    AppFooter
   }
 }
 </script>

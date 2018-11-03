@@ -15,7 +15,7 @@ const router = new Router({
       component: Home,
       meta: {
         auth: 'shouldNotAuthed',
-        layout: 'GuestLayout'
+        layout: 'guest-layout',
       }
     },
     {
@@ -24,7 +24,7 @@ const router = new Router({
       component: Main,
       meta: {
         auth: 'shouldAuthed',
-        layout: 'MainLayout'
+        layout: 'main-layout',
       }
     }
   ]

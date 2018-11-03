@@ -17,8 +17,8 @@ export default {
     }
   },
   components: {
-    'GuestLayout': GuestLayout,
-    'MainLayout': MainLayout,
+    GuestLayout,
+    MainLayout,
   }
 }
 </script>

@@ -1,7 +1,7 @@
 export default{
   namespaced: true,
   state: {
-    layout: 'GuestLayout',
+    layout: 'guest-layout',
     pageTitle: 'Similar site like Fiverr'
   },
   mutations: {
