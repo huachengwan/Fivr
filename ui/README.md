@@ -1,4 +1,5 @@
 # blu-ui
+Vuetify deployed for fivr site frontend.
 
 ## Project setup
 ```
