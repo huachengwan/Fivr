@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class Auth2Config(AppConfig):
+class SystemConfig(AppConfig):
     name = 'system'
