@@ -38,4 +38,4 @@ class Stat(models.Model):
 class Related(models.Model):
     id = models.AutoField(primary_key=True)
     thing = models.ForeignKey(Thing, on_delete=models.CASCADE)
-    related_thing = models.ForeignKey(Thing, related_name='related', on_delete=models.CASCADE)
+    related_thing = models.ForeignKey(Thing, related_name='related_thing', on_delete=models.CASCADE)

@@ -1,22 +1,30 @@
 <template>
-  <v-toolbar class='white'>
-    <v-container>
-      <v-toolbar-title v-text="title">Title</v-toolbar-title>
-      <sigin-dialog/>
-    </v-container>
-  </v-toolbar>
+  <v-container fluid class='pa-0 ma-0'>
+    <v-layout>
+      <v-flex xs12>
+        <v-container class='pa-0'>
+          <v-layout>
+            <v-flex xs12>
+              <div class='d-inline'>
+                <router-link to='/'>
+                  <v-img :src='logo' width='40' height='40'/>
+                </router-link>
+              </div>
+              <div class='d-inline'>
+
+              </div>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
-import SigninDialog from './SigninDialog'
-
-export default{
-  name: 'Header',
-  components: {
-    SigninDialog
+export default {
+  computed: {
+    logo: () => ( require('@/assets/logo.png'))
   },
-  data: () => ({
-    title: 'Fiverr'
-  })
 }
 </script>

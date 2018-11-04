@@ -8,9 +8,16 @@ import router from './router'
 import store from './store'
 import 'vuetify/dist/vuetify.min.css'
 import '@fortawesome/fontawesome-free/css/all.css'
+import '@/assets/main.stylus'
 
 Vue.use(Vuetify, {
-  iconfont: 'fa'
+  iconfont: 'fa',
+  theme: {
+    primary: '#e51817',
+    secondary: '#757575',
+    error: '#F57F17',
+    background: '#BBDEFB',
+  }
 })
 Vue.use(VueAxios,axios)
 Vue.config.productionTip = false
