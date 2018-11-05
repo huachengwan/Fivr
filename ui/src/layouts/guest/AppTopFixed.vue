@@ -6,12 +6,13 @@
           <v-container class='pa-0'>
             <v-layout>
               <v-flex xs12>
-                <div style='float:left'>
+                <div style='float:left' class="pt-3">
                   <router-link to='/'>
-                    City...
+                    Peru is great country...
                   </router-link>
                 </div>
                 <div style='float:right' >
+                  <v-btn @click='openSigninDialog' flat class='d-inline text-capitalize'>Hi, Please login..</v-btn>
                   <v-btn @click='openSigninDialog' flat class='d-inline text-capitalize'>Sign In</v-btn>
                   <v-btn @click='openSignupDialog' flat class='d-inline text-capitalize'>Join</v-btn>
                 </div>

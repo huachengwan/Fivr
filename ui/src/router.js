@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import store from './store'
 import Home from '@/views/home/Page.vue'
 import Main from '@/views/main/Page.vue'
+import Search from '@/views/search/Page.vue'
 
 Vue.use(Router)
 
@@ -26,6 +27,11 @@ const router = new Router({
         auth: 'shouldAuthed',
         layout: 'main-layout',
       }
+    },
+    {
+      path: '/search',
+      name: 'Search',
+      component: Search,
     }
   ]
 })

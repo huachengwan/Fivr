@@ -13,11 +13,14 @@ import '@/assets/main.stylus'
 Vue.use(Vuetify, {
   iconfont: 'fa',
   theme: {
-    primary: '#e51817',
+    primary: {
+      base: '#e51817',
+      darken1: '#f2f200'
+    },
     secondary: '#757575',
     error: '#F57F17',
-    background: '#BBDEFB',
-  }
+    background: '#eee',
+  },
 })
 Vue.use(VueAxios,axios)
 Vue.config.productionTip = false

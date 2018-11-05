@@ -12,14 +12,14 @@
               <v-card slot-scope='{ hover }' :class='`elevation-${hover ? 12 : 2}`'>
                 <v-responsive class='align-center'>
                   <p class='text-sm-center '>
-                    <router-link :to='`/category/${item.id}`' >
+                    <router-link :to='`/search?category=${item.id}`' >
                       <v-icon size='100'>fa-{{item.icon}}</v-icon>
                     </router-link>
                   </p>
                 </v-responsive>
                 <v-card-text align-center>
                   <p class='text-sm-center headline'>
-                    <router-link :to='`/category/${item.id}`' >
+                    <router-link :to='{ name: "Search", query: {category:item.id}}' >
                       {{item.name}}
                     </router-link>
                   </p>
@@ -39,7 +39,7 @@ import { mapState } from 'vuex'
 export default {
   name: "CategoryList",
   computed: {
-    ...mapState('things', ['allCategories'])
+    ...mapState('things', ['allCategories']),
   },
   mounted(){
     this.$store.dispatch('things/listAllCategories')

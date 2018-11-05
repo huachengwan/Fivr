@@ -1,5 +1,5 @@
 <template>
-  <v-app   >
+  <v-app>
     <app-top-fixed/>
     <v-content>
       <app-header/>
