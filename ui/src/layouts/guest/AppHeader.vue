@@ -3,16 +3,12 @@
     <v-layout>
       <v-flex xs12>
         <v-container class='pa-0'>
-          <v-layout>
+          <v-layout column>
             <v-flex xs12>
-              <div class='d-inline'>
-                <router-link to='/'>
-                  <v-img :src='logo' width='40' height='40'/>
-                </router-link>
-              </div>
-              <div class='d-inline'>
-
-              </div>
+              <router-link to='/'>
+                <v-img :src='logo' width='40' height='40'/>
+              </router-link>
+              <v-text-field label="Name" solo clearable style='width:200px'/>
             </v-flex>
           </v-layout>
         </v-container>

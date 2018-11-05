@@ -1,0 +1,20 @@
+- model: thing.category
+  pk: 1
+  fields:
+    name: Web Design
+    description: 3D Design , need web design works
+- model: thing.category
+  pk: 2
+  fields:
+    name: Web Development
+    description: PHP, NodeJS, React JS, VueJS
+- model: thing.category
+  pk: 3
+  fields:
+    name: Application development
+    description: C,C++ language
+- model: thing.Category
+  pk: 4
+  fields:
+    name: Web Engine Development
+    description: Python & Ruby ,  Elastic Search

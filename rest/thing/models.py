@@ -20,6 +20,7 @@ class Thing(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     type = models.ForeignKey(Type, on_delete=models.PROTECT)
     price_type = models.ForeignKey(PriceType, on_delete=models.PROTECT)
+    price_from = models.IntegerField()
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_on = models.DateField(auto_now_add=True)
 
@@ -35,7 +36,19 @@ class Stat(models.Model):
     key = models.CharField(max_length=100)
     value = models.CharField(max_length=100)
 
+class Message(models.Model):
+    id = models.AutoField(primary_key=True)
+    thing = models.ForeignKey(Thing, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    sent_on =models.DateField(auto_now_add=True)
+
 class Related(models.Model):
     id = models.AutoField(primary_key=True)
     thing = models.ForeignKey(Thing, on_delete=models.CASCADE)
     related_thing = models.ForeignKey(Thing, related_name='related_thing', on_delete=models.CASCADE)
+
+class Recommended(models.Model):
+    id = models.AutoField(primary_key=True)
+    thing = models.ForeignKey(Thing, on_delete=models.CASCADE)
