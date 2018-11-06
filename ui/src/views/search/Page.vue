@@ -1,32 +1,43 @@
 <template>
-  <div>
-    <main-filter/>
-    <main-list/>
-    <recommend-list/>  
-    <!-- <div v-for='(item, i) in searchedThings'>
-      {{item.name}}
-    </div> -->
-  </div>
+  <v-container fluid>
+    <v-layout>
+      <v-container >
+        <v-layout >
+          <v-flex xs9>
+            <v-layout row wrap>
+              <v-flex xs12>
+                <main-filter/>
+              </v-flex>
+            </v-layout>
+            <v-layout row wrap>
+              <v-flex xs12>
+                <list-searched/>
+              </v-flex>
+            </v-layout>
+          </v-flex>
+          <v-flex xs3>
+            <v-layout>
+              <v-flex xs12>
+                <list-recommended/>
+              </v-flex>
+            </v-layout>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
 import MainFilter from './MainFilter'
-import MainList from './MainList'
-import RecommenedList from './RecommenedList'
-import { mapState } from'vuex'
+import ListSearched from './ListSearched'
+import ListRecommended from '@/views/main/ListRecommended'
 export default {
   name: 'Search',
   components: {
     MainFilter,
-    MainList,
-    RecommenedList,
-  },
-  computed: {
-    ...mapState('things', ['searchedThings'])
-  },
-  mounted(){
-    console.log(this.$route.query)
-    this.$store.dispatch('things/searchThings',this.$route.query)
+    ListSearched,
+    ListRecommended
   }
 }
 </script>

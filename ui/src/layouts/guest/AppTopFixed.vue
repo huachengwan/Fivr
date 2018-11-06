@@ -12,7 +12,7 @@
                   </router-link>
                 </div>
                 <div style='float:right' >
-                  <v-btn @click='openSigninDialog' flat class='d-inline text-capitalize'>Hi, Please login..</v-btn>
+                  <span class='d-inline text-capitalize'>Hi, Please login..</span>
                   <v-btn @click='openSigninDialog' flat class='d-inline text-capitalize'>Sign In</v-btn>
                   <v-btn @click='openSignupDialog' flat class='d-inline text-capitalize'>Join</v-btn>
                 </div>
@@ -26,7 +26,7 @@
       <signin-form/>
     </blu-dialog>
     <blu-dialog :dialogVisible='visibleOfSignupDialog' @close='closeSignupDialog'>
-      <signin-form/>
+      <signup-form/>
     </blu-dialog>
   </v-toolbar>
 </template>

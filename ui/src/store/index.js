@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import VuexPersist from 'vuex-persist'
 import auth from './auth'
-import things from './things'
+import thing from './thing'
 import config from './config'
 
 const vuexPersist = new VuexPersist({
@@ -15,7 +15,7 @@ const store = new Vuex.Store({
   modules: {
     auth: auth,
     config: config,
-    things: things,
+    thing: thing,
   },
   plugins: [
     vuexPersist.plugin,

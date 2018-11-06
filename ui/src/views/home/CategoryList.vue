@@ -13,7 +13,7 @@
                 <v-responsive class='align-center'>
                   <p class='text-sm-center '>
                     <router-link :to='`/search?category=${item.id}`' >
-                      <v-icon size='100'>fa-{{item.icon}}</v-icon>
+                      <v-icon size='100'>fa-ad</v-icon>
                     </router-link>
                   </p>
                 </v-responsive>
@@ -37,12 +37,12 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-  name: "CategoryList",
+  name: 'CategoryList',
   computed: {
-    ...mapState('things', ['allCategories']),
+    ...mapState('thing', ['allCategories']),
   },
   mounted(){
-    this.$store.dispatch('things/listAllCategories')
+    this.$store.dispatch('thing/listAllCategories')
   }
 }
 </script>

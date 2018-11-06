@@ -21,6 +21,7 @@ class Thing(models.Model):
     type = models.ForeignKey(Type, on_delete=models.PROTECT)
     price_type = models.ForeignKey(PriceType, on_delete=models.PROTECT)
     price_from = models.IntegerField()
+    image = models.CharField(max_length=100)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_on = models.DateField(auto_now_add=True)
 
@@ -52,3 +53,9 @@ class Related(models.Model):
 class Recommended(models.Model):
     id = models.AutoField(primary_key=True)
     thing = models.ForeignKey(Thing, on_delete=models.CASCADE)
+
+class File(models.Model):
+    id = models.AutoField(primary_key=True)
+    thing = models.ForeignKey(Thing, on_delete=models.CASCADE)
+    key = models.CharField(max_length=100)
+    file = models.FileField(upload_to='project_img')

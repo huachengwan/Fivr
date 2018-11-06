@@ -5,4 +5,5 @@ urlpatterns = [
     path('category/', include('thing.category.urls')),
     path('list/', include('thing.list.urls')),
     path('message/', include('thing.message.urls')),
+    path('setting/', include('thing.setting.urls')),
 ]

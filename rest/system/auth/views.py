@@ -13,8 +13,8 @@ from rest_framework import viewsets, status, permissions
 @api_view(['POST'])
 @permission_classes((permissions.AllowAny,))
 def try_login(request):
-    username = request.data['username']
-    password = request.data['password']
+    username = request.data.get('username')
+    password = request.data.get('password')
     if username is None or password is None:
         return Response({'error': 'Please provide both username and password'}, status=status.HTTP_400_BAD_REQUEST)
     user = authenticate(username=username, password=password)
@@ -33,16 +33,16 @@ def signup(request):
     password = request.data.get('password')
     username = request.data.get('username')
 
-    lists = request.data.dict()
-    mores = {k.replace('more[', '').replace(']',''):v for k, v in lists.items() if re.match(r'more\[.*?\]',k)}
+    # lists = request.data.dict()
+    # mores = {k.replace('more[', '').replace(']',''):v for k, v in lists.items() if re.match(r'more\[.*?\]',k)}
 
     if not username and not password and not email:
         return Response({'error': 'Please provide both username and password'}, status=status.HTTP_400_BAD_REQUEST)
     new_user = User.objects.create_user(username=username, password=password, email=email)
-    if mores:
-        for k,v in mores.items():
-            userMore = UserMore(user=new_user, key=k, value=v)
-            userMore.save()
+    # if mores:
+    #     for k,v in mores.items():
+    #         userMore = UserMore(user=new_user, key=k, value=v)
+    #         userMore.save()
     # token, _ = Token.objects.get_or_create(user=new_user)
     return Response(status=status.HTTP_200_OK)
 

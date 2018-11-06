@@ -140,3 +140,6 @@ CORS_ORIGIN_ALLOW_ALL = True
 FIXTURE_DIRS = [
     os.path.join(BASE_DIR, 'thing', 'fixtures')
 ]
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

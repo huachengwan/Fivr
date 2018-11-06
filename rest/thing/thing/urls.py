@@ -2,5 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.ThingViewset.as_view({'get': 'get', 'post': 'post'})),
+    path('<int:id>', views.ThingViewset.as_view({'get': 'get'})),
+    path('', views.ThingViewset.as_view({'post': 'post'})),
 ]

@@ -17,10 +17,13 @@ Vue.use(Vuetify, {
       base: '#e51817',
       darken1: '#f2f200'
     },
-    secondary: '#757575',
+    secondary: '#c8ae97',
     error: '#F57F17',
     background: '#eee',
   },
+  options: {
+    customProperties: true
+  }
 })
 Vue.use(VueAxios,axios)
 Vue.config.productionTip = false

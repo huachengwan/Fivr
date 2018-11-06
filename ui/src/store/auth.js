@@ -17,15 +17,14 @@ export default{
       }else{
         return 'guest'
       }
+    },
+    getToken: state => {
+      return localStorage.getItem('token')
     }
   },
   mutations: {
-    setLogged: (state, userAccount, token) => {
-      if('account_type' in userAccount.more){
-        localStorage.setItem('accountType', userAccount.more.account_type)
-      }else{
-        localStorage.setItem('accountType', 'seller')
-      }
+    setLogged: (state, {userAccount, token}) => {
+      localStorage.setItem('accountType', 'customer')
       localStorage.setItem('userAccount', userAccount)
       localStorage.setItem('token', token)
     },
@@ -35,12 +34,9 @@ export default{
   },
   actions: {
     tryLogin: ({commit, dispatch}, formData) => {
-      let axiosConfig = {
-        withCredentials: true
-      };
       return new Promise((resolve, reject) => {
         axios.post(config.SERVER_URL+'api/auth/login', formData).then(res => {
-          commit('setLogged', res.data.userAccount, res.data.token)
+          commit('setLogged', res.data)
           resolve(res.data.userAccount)
         }).catch( res => {
           reject(res)
@@ -49,6 +45,15 @@ export default{
     },
     logout: ({commit}) => {
       commit('logout')
+    },
+    signup: ({commit}, formData) => {
+      return new Promise((resolve, reject) => {
+        axios.post(config.SERVER_URL+'api/auth/signup', formData).then(res => {
+          resolve()
+        }).catch( res => {
+          reject(res)
+        })
+      })
     }
   }
 }
