@@ -26,7 +26,12 @@
           <v-textarea label="Description" v-model='formData.description' :rules='rules.description' required/>
         </v-flex>
         <v-flex xs12>
-          <v-btn color='primary' :disabled='!valid' @click="post">Post</v-btn>
+          <div class="left">
+            <v-btn @click="back">Back</v-btn>
+          </div>
+          <div class="right">
+            <v-btn color='primary' :disabled='!valid' @click="post">Post</v-btn>
+          </div>
         </v-flex>
       </v-layout>
     </v-form>
@@ -135,6 +140,9 @@ export default {
       }, error => {
         alert('failure')
       })
+    },
+    back (){
+      this.$router.go(-1)
     }
   }
 }
