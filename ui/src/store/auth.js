@@ -1,57 +1,57 @@
 import axios from 'axios'
 import config from  '../../config'
-
+import router from '../router'
 
 export default{
   namespaced: true,
   state: {
+    isLogged: !!localStorage.getItem("token"),
   },
   getters: {
-    getAccount: state => {
-      return localStorage.getItem('userAccount')?localStorage.getItem('userAccount'):null
-    },
-    getType: state => {
-      if (localStorage.getItem('userAccount')) {
-        const userType = localStorage.getItem('accountType')
-        return userType
-      }else{
-        return 'guest'
-      }
-    },
-    getToken: state => {
-      return localStorage.getItem('token')
-    }
+    isLogged: state => { return state.isLogged}
   },
   mutations: {
-    setLogged: (state, {userAccount, token}) => {
-      localStorage.setItem('accountType', 'customer')
-      localStorage.setItem('userAccount', userAccount)
-      localStorage.setItem('token', token)
+    setLogged: state => {
+      state.isLogged = true
     },
-    logout: state => {
-      localStorage.clear()
-    }
+    setLogout: state => {
+      state.isLogged = false
+    },
   },
   actions: {
-    tryLogin: ({commit, dispatch}, formData) => {
+    tryLogin: ({state, commit, dispatch}, formData) => {
       return new Promise((resolve, reject) => {
         axios.post(config.SERVER_URL+'api/auth/login', formData).then(res => {
-          commit('setLogged', res.data)
+          localStorage.setItem('userAccount', JSON.stringify(res.data.userAccount))
+          localStorage.setItem('token', res.data.token)
+          commit('setLogged')
           resolve(res.data.userAccount)
         }).catch( res => {
           reject(res)
         })
       })
     },
-    logout: ({commit}) => {
-      commit('logout')
+    logout: ({state, commit}) => {
+      localStorage.removeItem('userAccount')
+      localStorage.removeItem('token')
+      commit('setLogout')
+      router.push({ name:'Home' })
     },
     signup: ({commit}, formData) => {
       return new Promise((resolve, reject) => {
-        axios.post(config.SERVER_URL+'api/auth/signup', formData).then(res => {
-          resolve()
+        let form = new FormData()
+        for(var key in formData){
+          form.append(key, formData[key])
+        }
+        const header = {
+          headers: {
+            'Content-Type': 'mulitipart/form-data'
+          }
+        }
+        axios.post(config.SERVER_URL+'api/auth/signup', form, header).then(res => {
+          return resolve()
         }).catch( res => {
-          reject(res)
+          return reject(res)
         })
       })
     }

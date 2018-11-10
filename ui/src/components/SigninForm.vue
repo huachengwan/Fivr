@@ -47,8 +47,7 @@ export default{
     tryLogin: function() {
       if (!this.$refs.form.validate()) return
       this.$store.dispatch('auth/tryLogin',this.formData).then(userAccount => {
-        this.$router.go('/main')
-        //this.$router.push({name:'Main'})
+        this.$router.push({name: 'Main'})
       },error => {
         // alert
         alert('login failure')

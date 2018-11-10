@@ -10,15 +10,18 @@
 import { mapState } from 'vuex'
 import ProjectListItem from "@/components/ProjectListItem";
 export default {
-  name: "ListSearched",
+  name: 'ListSearched',
   components: { ProjectListItem },
   computed: {
     ...mapState('thing', ['listSearched']),
   },
   mounted(){
     this.$store.dispatch('thing/listSearched')
-      .then(() => {},
-        error => {})
+      .then(() => {
+
+      }, error => {
+
+      })
   }
 }
 </script>

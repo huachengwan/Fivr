@@ -1,32 +1,32 @@
 <template>
-  <v-layout row wrap v-if='oneData'>
+  <v-layout row wrap>
     <v-flex xs6 class='project-image'>
-      <v-img :src='`http://localhost:8000/media/${oneData.main_image__name}`' aspect-ratio='1' width='90%' class='ma-1 pa-3'/>
+      <v-img :src='`http://localhost:8000/media/${data.main_image__path}`' aspect-ratio='1' width='90%' class='ma-1 pa-3'/>
     </v-flex>
     <v-flex xs6 class='short-desc'>
-      <h4 class='headline'>{{oneData.name}}</h4>
+      <h4 class='headline'>{{data.name}}</h4>
       <p>
         <label><strong>Price From</strong></label>
-        <span class='display-2 price'>{{oneData.price_from}}</span>
+        <span class='display-2 price'>{{data.price_from}}</span>
       </p>
       <p>
         <label><strong>Price Type</strong></label>
-        <span class=''>{{oneData.price_type__name}}</span>
+        <span class=''>{{data.price_type__name}}</span>
       </p>
       <p>
         <label><strong>Service Type</strong></label>
-        <span class=''>{{oneData.type__name}}</span>
+        <span class=''>{{data.type__name}}</span>
       </p>
       <p>
         <label><strong>Service Category</strong></label>
-        <span class=''>{{oneData.category__name}}</span>
+        <span class=''>{{data.category__name}}</span>
       </p>
-      <div v-if='oneRelation=="contactable"'>
+      <div v-if='relation=="contactable"'>
         <v-btn class='primary'>Contact</v-btn>
       </div>
     </v-flex>
     <v-flex xs12>
-      <v-tabs v-model="active" active-class='active-tab'>
+      <v-tabs active-class='active-tab'>
         <v-tab key='desc'>
           Description
         </v-tab>
@@ -38,7 +38,7 @@
         </v-tab>
         <v-tab-item key='desc'>
           <v-card flat>
-            <v-card-text>{{oneData.more.description}}</v-card-text>
+            <v-card-text>{{data.more.description}}</v-card-text>
           </v-card>
         </v-tab-item>
         <v-tab-item key='contact'>
@@ -59,9 +59,18 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-  name: "ProjectDetail",
+  name: 'ProjectDetail',
+  data: ()=>({
+    tabEnable: true
+  }),
   computed: {
-    ...mapState('thing', ['oneData', 'oneRelation'])
+    ...mapState('thing', ['selectedDetail']),
+    data: function() {
+      return this.selectedDetail.data
+    },
+    relation: function() {
+      return this.selectedDetail.relation
+    }
   }
 }
 </script>

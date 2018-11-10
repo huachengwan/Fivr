@@ -7,14 +7,26 @@
       <v-container grid-list-md>
         <v-form ref='form' v-model='valid'>
           <v-layout wrap>
-            <v-flex xs12>
+            <v-flex xs12 sm6>
               <v-text-field label="Username*" v-model='formData.username' :rules='rules.username' required></v-text-field>
             </v-flex>
-            <v-flex xs12>
+            <v-flex xs12 sm6>
+              <v-text-field label="Password*" type="password" :rules='rules.password' v-model='formData.password' required></v-text-field>
+            </v-flex>
+            <v-flex xs12 sm6>
               <v-text-field label="Email*" v-model='formData.email' :rules='rules.email' required></v-text-field>
             </v-flex>
+            <v-flex xs12 sm6>
+              <v-text-field label="Phone*" v-model='formData.phone' :rules='rules.phone' required></v-text-field>
+            </v-flex>
+            <v-flex xs12 sm6>
+              <v-text-field label="First Name*" v-model='formData.first_name' :rules='rules.first_name' required></v-text-field>
+            </v-flex>
+            <v-flex xs12 sm6>
+              <v-text-field label="Last Name*" v-model='formData.last_name' :rules='rules.last_name' required></v-text-field>
+            </v-flex>
             <v-flex xs12>
-              <v-text-field label="Password*" type="password" :rules='rules.password' v-model='formData.password' required></v-text-field>
+              <blu-file-picker v-model='formData.photo_file'/>
             </v-flex>
             <v-flex xs12>
               <v-btn :disabled='!valid' class='primary' @click="signup">Signup</v-btn>
@@ -29,14 +41,22 @@
 </template>
 
 <script>
+import BluFilePicker from '@/components/BluFilePicker'
 export default{
   name: 'SignupDialog',
+  components: {
+    BluFilePicker
+  },
   data: () => ({
     valid: false,
     formData: {
       username: '',
       email: '',
-      password: ''
+      password: '',
+      phone: '',
+      first_name: '',
+      last_name: '',
+      photo_file: null,
     },
     rules: {
       username: [
@@ -47,19 +67,28 @@ export default{
       ],
       password: [
         v => !!v || 'Password is required.'
-      ]
-    }
+      ],
+      phone: [
+        v => !!v || 'Phone number is required'
+      ],
+      first_name: [
+        v => !!v || 'First name is required'
+      ],
+      last_name: [
+        v => !!v || 'Last name is required'
+      ],
+    },
   }),
   methods: {
     signup: function() {
       if (!this.$refs.form.validate()) return
       this.$store.dispatch('auth/signup', this.formData).then(userAccount => {
         alert('Successfully signup! You can use your account now')
-        //this.$router.push({name:'Main'})
+        this.$router.push({name:'Home'})
       },error => {
         alert('signup failure')
       })
-    }
+    },
   }
 }
 </script>

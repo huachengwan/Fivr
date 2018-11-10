@@ -7,11 +7,10 @@
             <v-layout>
               <v-flex xs12>
                 <div style='float:left' class="pt-3">
-                  <router-link to='/'>
-                    Peru is great country...
-                  </router-link>
+                  <city-chooser/>
                 </div>
                 <div style='float:right' >
+                  <span >Hi, {{userAccount['first_name']}} {{userAccount['last_name']}}</span>
                   <v-btn @click='logout' flat class='d-inline text-capitalize'>Logout</v-btn>
                 </div>
               </v-flex>
@@ -24,19 +23,24 @@
 </template>
 
 <script>
-
+import { mapActions } from 'vuex'
+import CityChooser from '@/components/CityChooser'
 export default{
   name: 'TopFixed',
   components: {
+    CityChooser
   },
   computed: {
-    logo: () => ( require('@/assets/logo.png'))
+    userAccount: () => {
+      if (localStorage.getItem('userAccount')){
+        return JSON.parse(localStorage.getItem('userAccount'))
+      }else{
+        return {first_name:'', last_name:''}
+      }
+    }
   },
   methods: {
-    logout: function(){
-      this.$store.dispatch('auth/logout')
-      this.$router.go('/')
-    },
+    ...mapActions('auth', ['logout']),
   },
 }
 </script>

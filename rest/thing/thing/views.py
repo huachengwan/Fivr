@@ -18,27 +18,30 @@ class ThingViewset(viewsets.ModelViewSet):
     def post(self, request):
         name = request.data.get('name')
         category_id = request.data.get('category_id')
+        city_id = request.data.get('city_id')
         type_id = request.data.get('type_id')
         price_type_id = request.data.get('price_type_id')
         price_from = request.data.get('price_from', 15)
-        image_file = request.data.get('image_file0')
+        image_file = request.data.get('image_file')
         description = request.data.get('description')
-        if name is None or type_id is None or category_id is None or price_type_id is None or  image_file is None:
+        if not name or not type_id or not category_id or not price_type_id or not image_file or not city_id:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        category = Category.objects.get(pk=category_id)
-        type = Type.objects.get(pk=type_id)
-        price_type = PriceType.objects.get(pk=price_type_id)
-        thing = Thing(name=name, category=category, type=type, price_type=price_type, created_by=request.user, price_from=price_from)
+        thing = Thing(name=name, category_id=category_id, city_id=city_id, type_id=type_id, price_type_id=price_type_id, created_by=request.user, price_from=price_from, description=description)
         thing.save()
         file = File(thing=thing, key='main_image', file=image_file)
         file.save()
-        more = More(thing=thing, key='description', value=description)
-        more.save()
+        additional_image_files = request.data.getlist('additional_image_files')
+        if additional_image_files:
+            for image_file in additional_image_files:
+                if image_file == 'null':
+                    continue
+                file = File(thing=thing, key='additional_image', file=image_file)
+                file.save()
+
 
         return Response(status=status.HTTP_200_OK)
 
     def get(self, request, id):
-        id = id
         thing = Thing.objects.get(pk=id)
         if thing is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)

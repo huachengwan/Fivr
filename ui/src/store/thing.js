@@ -4,171 +4,186 @@ import config from "../../config";
 export default{
   namespaced: true,
   state: {
-    allCategories: [],
-    types: [],
-    priceTypes: [],
-    searchParams: {
-      keyword: '', category_id:''
+    baseDatas: {
+      categories: [],
+      types: [],
+      priceTypes: [],
+      cities: [],
     },
+    allCategories: [],
+    allCities: [],
     listCreatedBy: [],
     listRecommended: [],
+    searchParams: {
+      keyword: '',
+      category_id:'',
+      city_id: '',
+    },
     listSearched: [],
-    oneData:null,
-    oneRelation: 'none'
-  },
-  mutations: {
-    setSearchParamsByText: (state, keyword) => {
-      state.searchParams['keyword'] = keyword
-    },
-    listAllCategories: (state, list) => {
-      state.allCategories = list
-    },
-    listTypes: (state, list) => {
-      state.types = list
-    },
-    listPriceTypes: (state, list) => {
-      state.priceTypes = list
-    },
-    setSearchedThings: (state, list) => {
-      state.searchedThings = list
-    },
-    listCreatedBy: (state, list) => {
-      let list0 = []
-      for(let item of list){
-        if(item['main_image__name']=='')
-          item['main_image__name'] = config.SERVER_URL+'media/project_img/__no_image__.jpg'
-        else
-          item['main_image__name'] = config.SERVER_URL+'media/'+item['main_image__name']
-        list0.push(item)
-      }
-
-      state.listCreatedBy = list
-    },
-    listRecommended: (state, list) => {
-      let list0 = []
-      for(let item of list){
-        if(item['main_image__name']=='')
-          item['main_image__name'] = config.SERVER_URL+'media/project_img/__no_image__.jpg'
-        else
-          item['main_image__name'] = config.SERVER_URL+'media/'+item['main_image__name']
-        list0.push(item)
-      }
-
-      state.listRecommended = list0
-    },
-    listSearched: (state, list) => {
-      let list0 = []
-      for(let item of list){
-        if(item['main_image__name']=='')
-          item['main_image__name'] = config.SERVER_URL+'media/project_img/__no_image__.jpg'
-        else
-          item['main_image__name'] = config.SERVER_URL+'media/'+item['main_image__name']
-        list0.push(item)
-      }
-
-      state.listSearched = list0
+    selectedDetail: {
+      data: null,
+      relation: 'none'
     },
   },
   actions: {
-    listAllCategories: ({commit}) => {
+    getBaseDatas: ({state}) => {
+      axios.get(config.SERVER_URL+'api/thing/setting/category').then(res => {
+        const list = res.data
+        state.baseDatas.categories = []
+        for (let item of list){
+          state.baseDatas.categories.push({text: item.name, value: item.id})
+        }
+      })
+      axios.get(config.SERVER_URL+'api/thing/setting/type').then(res => {
+        const list = res.data
+        state.baseDatas.types = []
+        for (let item of list){
+          state.baseDatas.types.push({text: item.name, value: item.id})
+        }
+      })
+      axios.get(config.SERVER_URL+'api/thing/setting/price-type').then(res => {
+        const list = res.data
+        state.baseDatas.priceTypes = []
+        for (let item of list){
+          state.baseDatas.priceTypes.push({text: item.name, value: item.id})
+        }
+      })
+      axios.get(config.SERVER_URL+'api/thing/setting/city').then(res => {
+        const list = res.data
+        state.baseDatas.cities = []
+        for (let item of list){
+          state.baseDatas.cities.push({text: item.name, value: item.id})
+        }
+      })
+    },
+    listAllCategories: ({state}) => {
       return new Promise((resolve, reject) => {
         axios.get(config.SERVER_URL+'api/thing/category/all').then(res => {
           let list = res.data
-          commit('listAllCategories', list)
-          resolve(list)
+          state.allCategories = list
+          return resolve(list)
         }).catch( res => {
-          reject(res)
+          return reject(res)
         })
       })
     },
-    listTypes: ({commit}) => {
-      axios.get(config.SERVER_URL+'api/thing/setting/type').then(res => {
-        commit('listTypes', res.data)
-      })
-    },
-    listPriceTypes: ({commit}) => {
-      axios.get(config.SERVER_URL+'api/thing/setting/price-type').then(res => {
-        commit('listPriceTypes', res.data)
-      })
-    },
-    post: ({commit}, {token, formData}) => {
-      let form = new FormData();
-      for( var key in formData){
-        form.append(key, formData[key])
-      }
-      form.append('image_file0',formData.image_file)
-      const header = {
-        headers: {
-          Authorization: 'Token ' + token,
-          'Content-Type': 'multipart/form-data'
-        }
-      }
+    listAllCities: ({state}) => {
       return new Promise((resolve, reject) => {
-        axios.post(config.SERVER_URL+'api/thing/', form, header).then(res => {
-          resolve()
-        }).catch(res => {
-          reject(res)
+        axios.get(config.SERVER_URL+'api/thing/city/all').then(res => {
+          let list = res.data
+          state.allCities = list
+          if (state.searchParams.city_id == '' && state.allCities.length){
+            state.searchParams.city_id = list[0]['id']
+          }
+          return resolve(list)
+        }).catch( res => {
+          return reject(res)
         })
       })
     },
-    listCreatedBy: ({commit}, {token}) => {
-      const header = {
-        headers: {
-          Authorization: 'Token ' + token
-        }
-      }
+    listCreatedBy: ({state}) => {
       return new Promise((resolve, reject) => {
+        if( !localStorage.getItem('token') ){
+          return reject()
+        }
+        const header = {
+          headers: {
+            Authorization: 'Token ' + localStorage.getItem('token')
+          }
+        }
         axios.get(config.SERVER_URL+'api/thing/list/created-by',header).then(res => {
-          commit('listCreatedBy', res.data)
-          resolve()
+          let list = res.data
+          for(let item of list) {
+            item['main_image__path'] = config.SERVER_URL + 'media/' + item['main_image__path']
+          }
+          state.listCreatedBy = list
+          return resolve()
         }).catch(res => {
-          reject(res)
+          return reject(res)
         })
       })
     },
-    listRecommended: ({commit}) => {
+    listRecommended: ({state}) => {
       axios.get(config.SERVER_URL+'api/thing/list/recommended').then(res => {
-        commit('listRecommended', res.data)
-      })
-    },
-    listSearched: (context) => {
-      let header = {}
-      if(context.rootGetters['auth/getType'] != 'guest'){
-        header = {
-          headers:{
-            Authorization: 'Token ' + context.rootGetters['auth/getToken']
-          }
+        let list = res.data
+        for(let item of list){
+          item['main_image__path'] = config.SERVER_URL+'media/'+item['main_image__path']
         }
-      }
-      var data = {
-        keyword:context.state.searchParams.keyword,
-        category_id:context.state.searchParams.category_id,
-      }
 
-      axios.post(config.SERVER_URL+'api/thing/list/search', data, header).then(res => {
-        context.commit('listSearched', res.data)
+        state.listRecommended = list
       })
     },
-    setSearchParamsByText: ({commit}, keyword) => {
-      commit('setSearchParamsByText', keyword)
-    },
-    getDetail: (context, id) => {
-      let header = {}
-      if(context.rootGetters['auth/getType'] != 'guest'){
-        header = {
-          headers:{
-            Authorization: 'Token ' + context.rootGetters['auth/getToken']
+    getDetail: ({state}, id) => {
+      return new Promise((resolve, reject) => {
+        let header = {}
+        if( localStorage.getItem('token') ){
+          header = {
+            headers:{
+              Authorization: 'Token ' + localStorage.getItem('token')
+            }
           }
         }
-      }
-      axios.get(config.SERVER_URL+'api/thing/'+id,header).then(res => {
-        context.state.oneData = res.data.data
-        context.state.oneRelation = res.data.relation
-      }).catch(res => {
-        console.log('aaa')
-        context.state.oneData = null
-        context.state.oneRelation = 'none'
+        axios.get(config.SERVER_URL+'api/thing/'+id, header).then(res => {
+          state.selectedDetail = res.data
+          return resolve()
+        }).catch(res => {
+          return reject()
+        })
       })
-    }
+    },
+    post: ({commit}, formData) => {
+      return new Promise((resolve, reject) => {
+        let form = new FormData();
+        for( var key in formData){
+          if (key == 'additional_image_files'){
+            for (var image_key in formData['additional_image_files']){
+              form.append('additional_image_files',formData['additional_image_files'][image_key]['image_file'])
+            }
+            continue
+          }
+          form.append(key, formData[key])
+        }
+        const header = {
+          headers: {
+            Authorization: 'Token ' + localStorage.getItem('token'),
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+
+        axios.post(config.SERVER_URL+'api/thing/', form, header).then(res => {
+          return resolve()
+        }).catch(res => {
+          return reject(res)
+        })
+      })
+    },
+    listSearched: ({state}) => {
+      return new Promise((resolve, reject) => {
+        let header = {}
+        if (localStorage.getItem('token')) {
+          header = {
+            headers: {
+              Authorization: 'Token ' + localStorage.getItem('token')
+            }
+          }
+        }
+
+        const data = state.searchParams
+        if(data.city_id=='')
+          return reject()
+
+        axios.post(config.SERVER_URL + 'api/thing/list/search', data, header).then(res => {
+          let list = res.data
+          for(let item of list){
+            item['main_image__path'] = config.SERVER_URL+'media/'+item['main_image__path']
+          }
+          state.listSearched = list
+          return resolve()
+        }).catch( res => {
+          return reject()
+        })
+      })
+    },
+
   }
 }

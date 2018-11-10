@@ -1,7 +1,7 @@
 <template>
   <v-layout row justify-center>
     <v-dialog v-model='initDialogVisible' :max-width='maxWidth' >
-      <slot/>
+      <slot @close='close'/>
     </v-dialog>
   </v-layout>
 </template>

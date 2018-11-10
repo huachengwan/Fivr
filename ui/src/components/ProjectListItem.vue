@@ -1,12 +1,12 @@
 <template>
   <div class='item'>
     <div class='image pa-2 mr-2'>
-      <router-link :to='`/detail/${item.id}`'><img :src='item.main_image__name' width=120 height=100></router-link>
+      <router-link :to='`/detail/${item.id}`'><img :src='item.main_image__path' width=120 height=100></router-link>
     </div>
     <div class='main'>
       <router-link :to='`/detail/${item.id}`'><h4 class='title pa-1 my-1'>{{item.name}}</h4></router-link>
       <p class='desc pa-1 ma-0'><span class='mr-4'>Service type</span>{{item.type__name}}</p>
-      <p class='desc pa-1 ma-0'><span class='mr-4'>Price type</span>{{item.price_type__name}}</p>
+      <p class='desc pa-1 ma-0'><span class='mr-4'>Seller shop page</span>...(currently blank)...</p>
     </div>
     <div class='third'>
       <p class='ma-1 headline price'>S/.&nbsp;{{item.price_from}}</p>
@@ -28,6 +28,10 @@ export default {
   width: 100%
   > div
     float:left
+    &.main
+      .title
+        color: var(--v-accent-base)
+        font-weight: bold
     &.third
       width: 130px
       float:right

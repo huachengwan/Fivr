@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Category, Thing, Message, PriceType, Type, File, More
+from .models import Category, City, Thing, PriceType, Type, File, More
 from django.http import HttpRequest
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -9,9 +9,10 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ThingSerializer(serializers.ModelSerializer):
-    main_image__name = serializers.SerializerMethodField()
+    main_image__path = serializers.SerializerMethodField()
     type__name = serializers.SerializerMethodField()
     created_by__name = serializers.SerializerMethodField()
+    city__name = serializers.SerializerMethodField()
     category__name = serializers.SerializerMethodField()
     price_type__name = serializers.SerializerMethodField()
     more = serializers.SerializerMethodField()
@@ -20,9 +21,9 @@ class ThingSerializer(serializers.ModelSerializer):
         model = Thing
         fields = '__all__'
 
-    def get_main_image__name(self, obj):
+    def get_main_image__path(self, obj):
         try:
-            file = File.objects.get(thing=obj)
+            file = File.objects.get(thing=obj, key='main_image')
             return file.file.name
         except File.DoesNotExist:
             return 'project_img/__no_image__.jpg'
@@ -33,6 +34,9 @@ class ThingSerializer(serializers.ModelSerializer):
     def get_category__name(self, obj):
         category = Category.objects.get(pk=obj.category_id)
         return category.name
+    def get_city__name(self, obj):
+        city = City.objects.get(pk=obj.city_id)
+        return city.name
     def get_type__name(self, obj):
         type = Type.objects.get(pk=obj.type_id)
         return type.name
@@ -46,11 +50,11 @@ class ThingSerializer(serializers.ModelSerializer):
             data[more.key] = more.value
         return data
 
-class MessageSerializer(serializers.ModelSerializer):
+class CitySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Message
+        model = City
         fields = '__all__'
-
+        
 class PriceTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PriceType

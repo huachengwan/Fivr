@@ -1,29 +1,57 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+class CategoryKind(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    def __str__(self):
+        return self.name
+
 class Category(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=300)
+    kind = models.ForeignKey(CategoryKind, on_delete=models.PROTECT)
+    class Meta:
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
+    def __str__(self):
+        return self.name
+
+class City(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    class Meta:
+        verbose_name = 'City'
+        verbose_name_plural = 'Cities'
+    def __str__(self):
+        return self.name
 
 class Type(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
+    def __str__(self):
+        return self.name
 
 class PriceType(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
+    def __str__(self):
+        return self.name
 
 class Thing(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
+    city = models.ForeignKey(City, on_delete=models.PROTECT)
     type = models.ForeignKey(Type, on_delete=models.PROTECT)
     price_type = models.ForeignKey(PriceType, on_delete=models.PROTECT)
     price_from = models.IntegerField()
-    image = models.CharField(max_length=100)
+    description = models.TextField()
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_on = models.DateField(auto_now_add=True)
+    def __str__(self):
+        return self.name
 
 class More(models.Model):
     id = models.AutoField(primary_key=True)
@@ -31,13 +59,13 @@ class More(models.Model):
     key = models.CharField(max_length=100)
     value = models.CharField(max_length=100)
 
-class Stat(models.Model):
+class Comment(models.Model):
     id = models.AutoField(primary_key=True)
     thing = models.ForeignKey(Thing, on_delete=models.CASCADE)
-    key = models.CharField(max_length=100)
-    value = models.CharField(max_length=100)
+    commented_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    commented_on = models.DateField(auto_now_add=True)
 
-class Message(models.Model):
+class Contact(models.Model):
     id = models.AutoField(primary_key=True)
     thing = models.ForeignKey(Thing, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
@@ -53,6 +81,8 @@ class Related(models.Model):
 class Recommended(models.Model):
     id = models.AutoField(primary_key=True)
     thing = models.ForeignKey(Thing, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.thing.name
 
 class File(models.Model):
     id = models.AutoField(primary_key=True)

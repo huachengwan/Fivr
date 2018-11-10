@@ -34,9 +34,11 @@ class ListViewset(viewsets.ModelViewSet):
         # search by category, name
         category_id = request.data.get('category_id')
         keyword = request.data.get('keyword')
+        city_id = request.data.get('city_id')
         things = Thing.objects.all()
         if request.user.is_authenticated:
             things = things.exclude(created_by=request.user)
+        things = things.filter(city_id=city_id)
         if category_id is not None and category_id != '':
             things = things.filter(category_id=category_id)
         if keyword is not None and keyword != '':

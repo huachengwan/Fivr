@@ -16,6 +16,7 @@ const router = new Router({
       path: '/',
       name: 'Home',
       component: Home,
+      exact: true,
       meta: {
         auth: 'shouldNotAuthed',
         layout: 'guest-layout',
@@ -53,12 +54,15 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
+  const isLogged = localStorage.getItem('userAccount')
   if (to.meta.auth) {
-    if (to.meta.auth == 'shouldAuthed' && store.getters['auth/getType'] == 'guest'){
-      return next({name: 'Home'})
+    if (to.meta.auth == 'shouldAuthed' && !isLogged){
+      if (from.name != 'Home')
+        next({name: 'Home'})
     }
-    if (to.meta.auth == 'shouldNotAuthed' && store.getters['auth/getType'] != 'guest'){
-      return next({name: 'Main'})
+    if (to.meta.auth == 'shouldNotAuthed' && isLogged){
+      if (from.name != 'Main')
+        next({name: 'Main'})
     }
   }
 

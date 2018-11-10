@@ -13,12 +13,9 @@ import '@/assets/main.stylus'
 Vue.use(Vuetify, {
   iconfont: 'fa',
   theme: {
-    primary: {
-      base: '#e51817',
-      darken1: '#f2f200'
-    },
-    secondary: '#c8ae97',
-    error: '#F57F17',
+    primary: '#e51b17',
+    accent: '#333',
+    info: '#c8ae97',
     background: '#eee',
   },
   options: {

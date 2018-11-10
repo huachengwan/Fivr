@@ -16,7 +16,7 @@ export default {
     ...mapState('thing', ['listCreatedBy']),
   },
   mounted(){
-    this.$store.dispatch('thing/listCreatedBy',{token: this.$store.getters['auth/getToken']})
+    this.$store.dispatch('thing/listCreatedBy')
       .then(() => {},
         error => {})
   }

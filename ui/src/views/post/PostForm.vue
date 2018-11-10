@@ -6,24 +6,29 @@
           <v-text-field label='Title' v-model='formData.name' :rules='rules.username' required/>
         </v-flex>
         <v-flex xs12 class='pa-2'>
-          <img :src="imageUrl" height="150" v-if="imageUrl"/>
-          <v-text-field label="Select Image" @click='pickFile' v-model='formData.image_name' :rules='rules.image_name' required prepend-icon='fa-link'></v-text-field>
-          <input type="file" style="display: none" ref="image" accept="image/*" @change="onFilePicked"/>
+          <blu-file-picker v-model='formData.image_file'/>
         </v-flex>
-        <v-flex xs12 sm6 class='pa-2'>
+        <v-flex xs12 sm6 md4 class='pa-2'>
           <v-text-field label='Price From' v-model='formData.price_from' :rules='rules.price_from' required/>
         </v-flex>
-        <v-flex xs12 sm6 class='pa-2'>
-          <v-select :items="priceTypes" label='Price Type' v-model='formData.price_type_id' :rules='rules.price_type_id' required/>
+        <v-flex xs12 sm6 md4 class='pa-2'>
+          <v-select :items="baseDatas.priceTypes" label='Price Type' v-model='formData.price_type_id' :rules='rules.price_type_id' required/>
         </v-flex>
-        <v-flex xs12 sm6 class='pa-2'>
-          <v-select :items="types" label='Service Type' v-model='formData.type_id' :rules='rules.type_id' required/>
+        <v-flex xs12 sm6 md4 class='pa-2'>
+          <v-select :items="baseDatas.types" label='Service Type' v-model='formData.type_id' :rules='rules.type_id' required/>
         </v-flex>
-        <v-flex xs12 sm6 class='pa-2'>
-          <v-select :items="categories" label='Service Category' v-model='formData.category_id' :rules='rules.category_id' required/>
+        <v-flex xs12 sm6 md4 class='pa-2'>
+          <v-select :items="baseDatas.categories" label='Service Category' v-model='formData.category_id' :rules='rules.category_id' required/>
+        </v-flex>
+        <v-flex xs12 sm6 md4 class='pa-2'>
+          <v-select :items="baseDatas.cities" label='City' v-model='formData.city_id' :rules='rules.city_id' required/>
         </v-flex>
         <v-flex xs12 class='pa-2'>
           <v-textarea label="Description" v-model='formData.description' :rules='rules.description' required/>
+        </v-flex>
+        <v-flex xs12 class='pa-2'>
+          <h4>Additional Image Files <v-btn class='secondary pa-0' style='min-width:32px'><v-icon size='14' @click='plus_additional_file'>fa fa-plus</v-icon></v-btn></h4>
+          <blu-file-picker v-for='item in formData.additional_image_files' v-model='item.image_file'/>
         </v-flex>
         <v-flex xs12>
           <div class="left">
@@ -39,26 +44,31 @@
 </template>
 
 <script>
-import { mapState} from 'vuex'
+import { mapState, mapActions } from 'vuex'
+import BluFilePicker from '@/components/BluFilePicker'
 export default {
   name: "PostForm",
+  components: {
+    BluFilePicker
+  },
   data: () => ({
     valid:false,
     formData: {
       name: '',
-      image_name: '',
       price_from: '',
       price_type_id: '',
       type_id: '',
       category_id: '',
+      city_id: '',
       description: '',
       image_file: '',
+      additional_image_files: [],
     },
     rules:{
       name: [
         v => !!v || 'Username is required'
       ],
-      image_name: [
+      image_file: [
         v => !!v || 'Image is required'
       ],
       price_from: [
@@ -73,76 +83,37 @@ export default {
       category_id: [
         v => !!v || 'Category is required'
       ],
+      city_id: [
+        v => !!v || 'City is required'
+      ],
       description: [
         v => !!v || 'Description is required'
       ],
     },
     dialog: false,
-    imageName: '',
-    imageUrl: '',
-    imageFile: ''
   }),
   computed: {
-    categories: function(){
-      let list = []
-      for (let item of this.$store.state.thing.allCategories){
-        list.push({text:item['name'],value:item['id']})
-      }
-      return list
-    },
-    priceTypes: function(){
-      let list = []
-      for (let item of this.$store.state.thing.priceTypes){
-        list.push({text:item['name'],value:item['id']})
-      }
-      return list
-    },
-    types: function(){
-      let list = []
-      for (let item of this.$store.state.thing.types){
-        list.push({text:item['name'], value:item['id']})
-      }
-      return list
-    }
+    ...mapState('thing', ['baseDatas']),
   },
   mounted(){
-    this.$store.dispatch('thing/listAllCategories')
-    this.$store.dispatch('thing/listPriceTypes')
-    this.$store.dispatch('thing/listTypes')
+    this.$store.dispatch('thing/getBaseDatas')
   },
   methods: {
-    pickFile () {
-      this.$refs.image.click ()
-    },
-    onFilePicked (e) {
-      const files = e.target.files
-      if(files[0] !== undefined) {
-        this.formData.image_name = files[0].name
-        if(this.formData.image_name.lastIndexOf('.') <= 0) {
-          return
-        }
-        const fr = new FileReader ()
-        fr.readAsDataURL(files[0])
-        fr.addEventListener('load', () => {
-          this.imageUrl = fr.result
-          this.formData.image_file = files[0]
-        })
-      } else {
-        this.formData.image_name = ''
-        this.formData.image_file = ''
-        this.imageUrl = ''
-      }
-    },
     post (){
       if (!this.$refs.form.validate()) return
-      this.$store.dispatch('thing/post', {token: this.$store.getters['auth/getToken'], formData: this.formData}).then(() => {
-        this.$router.push({name:'Main'})
+      this.$store.dispatch('thing/post', this.formData).then(() => {
+        this.$router.push({name: 'Main'})
       }, error => {
         alert('failure')
       })
     },
     back (){
-      this.$router.go(-1)
+      this.$router.push({name: 'Main'})
+    },
+    plus_additional_file (){
+      if (this.formData.additional_image_files.length >= 9)
+        return
+      this.formData.additional_image_files.push({ image_file:null })
     }
   }
 }
