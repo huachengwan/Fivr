@@ -2,11 +2,11 @@
   <div>
     <div>
       <span class="subheading">Service type filter: </span>
-      <v-btn  v-for='category in allCategories' @click='select_category(category)' :class='{primary: category.id==searchParams["category_id"]}'>{{category.name}}</v-btn>
+      <v-btn flat v-for='category in allCategories' @click='select_category(category)' :class='{primary: category.id==searchParams["category_id"]}'>{{category.name}}</v-btn>
     </div>
     <div>
       <span class="subheading">City location filter: </span>
-      <v-btn  v-for='city in allCities' @click='select_city(city)' :class='{primary: city.id==searchParams["city_id"]}'>{{city.name}}</v-btn>
+      <v-btn flat v-for='city in allCities' @click='select_city(city)' :class='{primary: city.id==searchParams["city_id"]}'>{{city.name}}</v-btn>
     </div>
   </div>
 </template>
