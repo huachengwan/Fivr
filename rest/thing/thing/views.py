@@ -1,7 +1,7 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from thing.serializers import ThingSerializer
-from thing.models import Thing, File, Category, PriceType, Type, More
+from thing.models import Thing, File, Category, PriceType, Type, More, Contact, Comment
 
 class ThingViewset(viewsets.ModelViewSet):
     serializer_class = ThingSerializer
@@ -37,8 +37,6 @@ class ThingViewset(viewsets.ModelViewSet):
                     continue
                 file = File(thing=thing, key='additional_image', file=image_file)
                 file.save()
-
-
         return Response(status=status.HTTP_200_OK)
 
     def get(self, request, id):
@@ -47,11 +45,27 @@ class ThingViewset(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         serializer = self.get_serializer(thing)
         data = serializer.data
-        relation = 'none'
+        contactable = 'none'
+        commentable = 'none'
         if request.user.is_authenticated:
             if thing.created_by_id == request.user.id:
-                relation = 'owner'
+                pass
             else:
-                relation = 'contactable'
-        return Response({'data': data, 'relation': relation}, status=status.HTTP_200_OK)
+                sender_id = request.user.id
+                try:
+                    contact = Contact.objects.get(thing_id=id, sender_id=sender_id)
+                    contactable = 'already'
+                except:
+                    contactable = 'allow'
+        if request.user.is_authenticated:
+            commented_by_id = request.user.id
+            if thing.created_by_id == request.user.id:
+                pass
+            else:
+                try:
+                    comment = Comment.objects.get(thing_id=id, commented_by_id=commented_by_id)
+                    commentable = 'already'
+                except:
+                    commentable = 'allow'
+        return Response({'data': data, 'contactable': contactable, 'commentable':commentable}, status=status.HTTP_200_OK)
 

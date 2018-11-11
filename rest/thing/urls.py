@@ -6,4 +6,5 @@ urlpatterns = [
     path('city/', include('thing.city.urls')),
     path('list/', include('thing.list.urls')),
     path('setting/', include('thing.setting.urls')),
+    path('social/', include('thing.social.urls')),
 ]

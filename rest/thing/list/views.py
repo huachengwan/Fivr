@@ -35,6 +35,7 @@ class ListViewset(viewsets.ModelViewSet):
         category_id = request.data.get('category_id')
         keyword = request.data.get('keyword')
         city_id = request.data.get('city_id')
+        type_id = request.data.get('type_id')
         things = Thing.objects.all()
         if request.user.is_authenticated:
             things = things.exclude(created_by=request.user)
@@ -43,6 +44,8 @@ class ListViewset(viewsets.ModelViewSet):
             things = things.filter(category_id=category_id)
         if keyword is not None and keyword != '':
             things = things.filter(name__contains=keyword)
+        if type_id is not None and type_id != '':
+            things = things.filter(type_id=type_id)
         serializer = self.get_serializer(things, many=True)
         data = serializer.data
         return Response(data)

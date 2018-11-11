@@ -29,7 +29,8 @@
               <blu-file-picker v-model='formData.photo_file'/>
             </v-flex>
             <v-flex xs12>
-              <v-btn :disabled='!valid' class='primary' @click="signup">Signup</v-btn>
+              <v-btn class='default' @click="close">Cancel</v-btn>
+              <v-btn :disabled='!valid' class='primary right' @click="signup">Signup</v-btn>
             </v-flex>
           </v-layout>
         </v-form>
@@ -84,11 +85,14 @@ export default{
       if (!this.$refs.form.validate()) return
       this.$store.dispatch('auth/signup', this.formData).then(userAccount => {
         alert('Successfully signup! You can use your account now')
-        this.$router.push({name:'Home'})
+        this.$emit('close')
       },error => {
         alert('signup failure')
       })
     },
+    close: function(){
+      this.$emit('close')
+    }
   }
 }
 </script>

@@ -57,12 +57,10 @@ router.beforeEach((to, from, next) => {
   const isLogged = localStorage.getItem('userAccount')
   if (to.meta.auth) {
     if (to.meta.auth == 'shouldAuthed' && !isLogged){
-      if (from.name != 'Home')
-        next({name: 'Home'})
+      return next({name: 'Home'})
     }
     if (to.meta.auth == 'shouldNotAuthed' && isLogged){
-      if (from.name != 'Main')
-        next({name: 'Main'})
+      return next({name: 'Main'})
     }
   }
 

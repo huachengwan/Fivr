@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib import admin
-from .models import Category, City, Type, PriceType, CategoryKind, Recommended
+from .models import Category, City, Type, PriceType, CategoryGroup, Recommended
 
 class CityForm(forms.ModelForm):
     class Meta:
@@ -10,16 +10,16 @@ class CityAdmin(admin.ModelAdmin):
     form = CityForm
 admin.site.register(City, CityAdmin)
 
-class CategoryKindForm(forms.ModelForm):
+class CategoryGroupForm(forms.ModelForm):
     class Meta:
-        model = CategoryKind
+        model = CategoryGroup
         fields = '__all__'
-class CategoryKindAdmin(admin.ModelAdmin):
-    form = CategoryKindForm
+class CategoryGroupAdmin(admin.ModelAdmin):
+    form = CategoryGroupForm
     list_display = ('id', 'name')
     list_display_links = ('id', 'name')
     ordering = ['id']
-admin.site.register(CategoryKind, CategoryKindAdmin)
+admin.site.register(CategoryGroup, CategoryGroupAdmin)
 
 class CategoryForm(forms.ModelForm):
     class Meta:
@@ -27,7 +27,7 @@ class CategoryForm(forms.ModelForm):
         fields = '__all__'
 class CategoryAdmin(admin.ModelAdmin):
     form = CategoryForm
-    list_display = ('id', 'name', 'description', 'category_kind')
+    list_display = ('id', 'name', 'description', 'group')
     list_display_links = ('id', 'name')
     ordering = ['id']
     def category_kind(self, obj):

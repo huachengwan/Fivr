@@ -23,10 +23,10 @@
       </v-layout>
     </v-container>
     <blu-dialog :dialogVisible='visibleOfSigninDialog' @close='closeSigninDialog'>
-      <signin-form/>
+      <signin-form @close='closeSigninDialog'/>
     </blu-dialog>
     <blu-dialog :dialogVisible='visibleOfSignupDialog' @close='closeSignupDialog' :max-width=800>
-      <signup-form/>
+      <signup-form @close='closeSignupDialog'/>
     </blu-dialog>
   </v-toolbar>
 </template>

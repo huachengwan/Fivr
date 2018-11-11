@@ -6,6 +6,7 @@ import * as Cookies from 'js-cookie'
 import auth from './auth'
 import thing from './thing'
 import config from './config'
+import social from './social'
 
 // const vuexPersist = new VuexPersist({
 //   key: 'blu-ui',
@@ -18,6 +19,7 @@ const store = new Vuex.Store({
     auth: auth,
     config: config,
     thing: thing,
+    social: social
   },
   plugins: [
     //vuexPersist.plugin,

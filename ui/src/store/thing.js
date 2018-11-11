@@ -12,17 +12,20 @@ export default{
     },
     allCategories: [],
     allCities: [],
+    allTypes: [],
     listCreatedBy: [],
     listRecommended: [],
     searchParams: {
       keyword: '',
       category_id:'',
       city_id: '',
+      type_id:'',
     },
     listSearched: [],
     selectedDetail: {
       data: null,
-      relation: 'none'
+      contactable: 'none',
+      commentable: 'none'
     },
   },
   actions: {
@@ -81,6 +84,17 @@ export default{
         })
       })
     },
+    listAllTypes: ({state}) => {
+      return new Promise((resolve, reject) => {
+        axios.get(config.SERVER_URL+'api/thing/setting/type').then(res => {
+          let list = res.data
+          state.allTypes = list
+          return resolve(list)
+        }).catch( res => {
+          return reject(res)
+        })
+      })
+    },
     listCreatedBy: ({state}) => {
       return new Promise((resolve, reject) => {
         if( !localStorage.getItem('token') ){
@@ -124,6 +138,16 @@ export default{
           }
         }
         axios.get(config.SERVER_URL+'api/thing/'+id, header).then(res => {
+          // pre-process for image path
+          let data = res.data.data
+          data.main_image__path = config.SERVER_URL+'media/'+data.main_image__path
+          for(let i in data.additional_image_paths){
+             data.additional_image_paths[i] = config.SERVER_URL+'media/'+data.additional_image_paths[i]
+          }
+          for(let i in data.comments){
+            data.comments[i]['commentor.photo'] = config.SERVER_URL+'media/'+data.comments[i]['commentor.photo']
+          }
+
           state.selectedDetail = res.data
           return resolve()
         }).catch(res => {

@@ -14,7 +14,15 @@
               <v-text-field label="Password*" type="password" :rules='rules.password' v-model='formData.password' required></v-text-field>
             </v-flex>
             <v-flex xs12>
-              <v-btn color='primary' :disabled='!valid' @click="tryLogin">Login</v-btn>
+              <!--
+              <g-signin-button :params='googleSigninParams' @success='onSigninSuccess' @error='onSigninError'>
+                Sign in with Google
+              </g-signin-button>
+              -->
+            </v-flex>
+            <v-flex xs12>
+              <v-btn class='default' @click="close">Cancel</v-btn>
+              <v-btn color='primary right' :disabled='!valid' @click="tryLogin">Login</v-btn>
             </v-flex>
           </v-layout>
         </v-form>
@@ -41,6 +49,9 @@ export default{
       password: [
         v => !!v || 'Password is required.'
       ]
+    },
+    googleSigninParams: {
+      client_id: '240178466896-tbvua8563o0e8182ib09fgtl28rv6rs0.apps.googleusercontent.com'
     }
   }),
   methods: {
@@ -52,6 +63,15 @@ export default{
         // alert
         alert('login failure')
       })
+    },
+    close: function(){
+      this.$emit('close')
+    },
+    onSigninSuccess (googleUser){
+      const profile = googleUser.getBasicProfile()
+    },
+    onSigninError (error){
+      console.log('Google Signin error', error)
     }
   }
 }

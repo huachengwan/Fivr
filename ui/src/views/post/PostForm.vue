@@ -24,7 +24,7 @@
           <v-select :items="baseDatas.cities" label='City' v-model='formData.city_id' :rules='rules.city_id' required/>
         </v-flex>
         <v-flex xs12 class='pa-2'>
-          <v-textarea label="Description" v-model='formData.description' :rules='rules.description' required/>
+          <wysiwyg v-model='formData.description' :rules="rules.description"/>
         </v-flex>
         <v-flex xs12 class='pa-2'>
           <h4>Additional Image Files <v-btn class='secondary pa-0' style='min-width:32px'><v-icon size='14' @click='plus_additional_file'>fa fa-plus</v-icon></v-btn></h4>
